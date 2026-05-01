@@ -226,3 +226,4 @@ export async function getDividends() { return {}; }
 export async function getHistoricalExchangeRate() { return 1.0; }
 export async function getExchangeRates() { return {}; }
 export async function getScreenerSymbols() { return ['AAPL', 'MSFT', 'NVDA']; }
+export async function getTrendingTickers() { return getTrendingSymbols(); }
