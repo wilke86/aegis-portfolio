@@ -7,5 +7,23 @@
 
 [[redirects]]
   from = "/api/yahoo/*"
-  to = "/.netlify/functions/yahoo/:splat"
+  to = "/.netlify/functions/yahoo/y/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/custom-yahoo/*"
+  to = "/.netlify/functions/yahoo/c/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/search/*"
+  to = "/.netlify/functions/yahoo/s/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
   status = 200

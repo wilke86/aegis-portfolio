@@ -8,24 +8,23 @@ export const handler = async (event) => {
   let targetPath = '';
   let domain = 'query1.finance.yahoo.com';
 
-  // Mapeo inteligente de rutas
-  if (fullPath.includes('/api/yahoo')) {
-    targetPath = fullPath.split('/api/yahoo')[1];
-  } else if (fullPath.includes('/api/custom-yahoo')) {
-    targetPath = fullPath.split('/api/custom-yahoo')[1];
-    // Ajustes para alias comunes
-    if (targetPath.startsWith('/quote')) targetPath = targetPath.replace('/quote', '/v7/finance/quote');
-    if (targetPath.startsWith('/financials')) targetPath = targetPath.replace('/financials', '/v10/finance/quoteSummary');
-    if (targetPath.startsWith('/quoteSummary')) targetPath = targetPath.replace('/quoteSummary', '/v10/finance/quoteSummary');
-  } else if (fullPath.includes('/api/search')) {
-    targetPath = fullPath.split('/api/search')[1];
-    domain = 'query2.finance.yahoo.com'; // La búsqueda suele ir a query2
-  } else {
-    targetPath = fullPath.replace('/.netlify/functions/yahoo', '');
+  // Sistema de etiquetas: /y/ = yahoo, /c/ = custom, /s/ = search
+  if (fullPath.includes('/yahoo/y/')) {
+    targetPath = fullPath.split('/yahoo/y/')[1];
+  } else if (fullPath.includes('/yahoo/c/')) {
+    targetPath = fullPath.split('/yahoo/c/')[1];
+    if (targetPath.startsWith('quote')) targetPath = targetPath.replace('quote', 'v7/finance/quote');
+    if (targetPath.startsWith('financials')) targetPath = targetPath.replace('financials', 'v10/finance/quoteSummary');
+    if (targetPath.startsWith('quoteSummary')) targetPath = targetPath.replace('quoteSummary', 'v10/finance/quoteSummary');
+    if (!targetPath.startsWith('/')) targetPath = '/' + targetPath;
+  } else if (fullPath.includes('/yahoo/s/')) {
+    targetPath = fullPath.split('/yahoo/s/')[1];
+    domain = 'query2.finance.yahoo.com';
+    if (!targetPath.startsWith('/')) targetPath = '/' + targetPath;
   }
 
-  if (!targetPath || targetPath === '/') {
-    return { statusCode: 400, body: JSON.stringify({ error: "Invalid path" }) };
+  if (!targetPath) {
+    return { statusCode: 400, body: JSON.stringify({ error: "Invalid path logic", received: fullPath }) };
   }
 
   const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
@@ -44,11 +43,10 @@ export const handler = async (event) => {
       if (crumbRes.ok) cachedCrumb = await crumbRes.text();
     }
 
-    // Construir URL final con parámetros de búsqueda si existen
+    // Usar event.rawQuery para los parámetros
     const queryString = event.rawQuery ? `?${event.rawQuery}` : '';
     let targetUrl = `https://${domain}${targetPath}${queryString}`;
     
-    // Añadir crumb si es necesario
     if (targetPath.includes('/chart/') || targetPath.includes('/quoteSummary/')) {
       if (cachedCrumb) {
         targetUrl += (targetUrl.includes('?') ? '&' : '?') + `crumb=${cachedCrumb}`;
@@ -78,7 +76,7 @@ export const handler = async (event) => {
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message, path: targetPath })
+      body: JSON.stringify({ error: error.message, target: targetPath })
     };
   }
 };
