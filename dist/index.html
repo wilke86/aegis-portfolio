@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PortfolioVision — Smart Portfolio Tracker</title>
+  <meta name="description" content="Track your stock and ETF portfolio in real-time with beautiful visualizations and analytics." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📈%3C/text%3E%3C/svg%3E">
+  <script type="module" crossorigin src="/assets/index-PdMbOfEh.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-C6oVdimi.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Ambient Background -->
+    <div class="ambient-bg">
+      <div class="ambient-orb ambient-orb-1"></div>
+      <div class="ambient-orb ambient-orb-2"></div>
+      <div class="ambient-orb ambient-orb-3"></div>
+    </div>
+
+    <!-- Auth Screen -->
+    <div class="auth-screen" id="auth-screen">
+      <div class="auth-container">
+        <div class="auth-logo">
+          <div class="logo-icon" style="width:48px;height:48px">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M4 24L10 16L16 20L22 8L28 12" stroke="url(#logoGrad2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs><linearGradient id="logoGrad2" x1="4" y1="24" x2="28" y2="8"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
+            </svg>
+          </div>
+          <h1 class="auth-title">PortfolioVision</h1>
+          <p class="auth-subtitle">Tu portfolio de inversiones inteligente</p>
+        </div>
+
+        <div class="auth-card glass-card">
+          <div class="auth-tabs">
+            <button class="auth-tab active" data-tab="login" id="tab-login">Iniciar sesión</button>
+            <button class="auth-tab" data-tab="register" id="tab-register">Registrarse</button>
+          </div>
+
+          <!-- Login Form -->
+          <form class="auth-form" id="form-login">
+            <div class="form-group">
+              <label for="login-email">Email</label>
+              <div class="input-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+                <input type="email" id="login-email" placeholder="tu@email.com" required autocomplete="email">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="login-password">Contraseña</label>
+              <div class="input-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                <input type="password" id="login-password" placeholder="Tu contraseña" required autocomplete="current-password">
+              </div>
+            </div>
+            <div class="auth-error" id="login-error" style="display:none"></div>
+            <button type="submit" class="btn-primary auth-submit" id="btn-login">
+              <span>Entrar</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </form>
+
+          <!-- Register Form -->
+          <form class="auth-form" id="form-register" style="display:none">
+            <div class="form-group">
+              <label for="register-name">Nombre</label>
+              <div class="input-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <input type="text" id="register-name" placeholder="Tu nombre" required autocomplete="name">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="register-email">Email</label>
+              <div class="input-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+                <input type="email" id="register-email" placeholder="tu@email.com" required autocomplete="email">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="register-password">Contraseña</label>
+              <div class="input-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                <input type="password" id="register-password" placeholder="Mínimo 6 caracteres" required autocomplete="new-password" minlength="6">
+              </div>
+            </div>
+            <div class="auth-error" id="register-error" style="display:none"></div>
+            <button type="submit" class="btn-primary auth-submit" id="btn-register">
+              <span>Crear cuenta</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </form>
+
+          <!-- Verification Form -->
+          <form class="auth-form" id="form-verify" style="display:none">
+            <p class="auth-subtitle" style="margin-top: 0; margin-bottom: 24px; font-size: 0.95rem; line-height: 1.5; color: var(--text-primary);">
+              Hemos enviado un código de seguridad a tu correo. Por favor, introdúcelo debajo para continuar.
+            </p>
+            <div class="form-group">
+              <label for="verify-code">Código de Verificación</label>
+              <div class="input-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <input type="text" id="verify-code" placeholder="000000" required maxlength="6" pattern="\d{6}" 
+                       style="font-family: var(--font-mono); letter-spacing: 0.8em; text-indent: 0.4em; font-size: 1.5rem; text-align: center; padding-left: 12px !important;">
+              </div>
+            </div>
+            <div class="auth-error" id="verify-error" style="display:none"></div>
+            <button type="submit" class="btn-primary auth-submit" id="btn-verify" style="margin-top: 8px;">
+              <span>Verificar y Continuar</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+            </button>
+            
+            <div style="margin-top: 24px; text-align: center;">
+              <button type="button" id="btn-resend-code" style="background: none; border: none; color: var(--accent-primary); font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: underline;">
+                ¿No has recibido el código? Reenviar
+              </button>
+            </div>
+
+            <button type="button" class="btn-secondary" id="btn-verify-back" style="margin-top: 16px; width: 100%; border: none; background: rgba(255,255,255,0.05); font-size: 0.85rem;">
+              <span>Volver al inicio de sesión</span>
+            </button>
+          </form>
+
+          <!-- Pending Approval Screen -->
+          <div class="auth-form" id="screen-pending-approval" style="display:none; text-align: center;">
+            <div style="width: 64px; height: 64px; background: rgba(245, 158, 11, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="2" style="width: 32px; height: 32px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <h3 style="margin-bottom: 12px;">Esperando Aprobación</h3>
+            <p class="auth-subtitle" style="margin-bottom: 24px; font-size: 0.95rem; line-height: 1.6;">
+              Tu correo ha sido validado. Hemos notificado al administrador (<strong>joanwilke86@gmail.com</strong>).
+              Recibirás un código de licencia una vez que tu solicitud sea aprobada.
+            </p>
+            <button type="button" class="btn-secondary btn-back-to-login" style="width: 100%; border: none; background: rgba(255,255,255,0.05);">
+              <span>Cerrar</span>
+            </button>
+            <button type="button" class="btn-secondary btn-delete-test-account" style="margin-top: 16px; width: 100%; border: none; background: rgba(239, 68, 68, 0.1); color: #ef4444; font-size: 0.8rem;">
+              <span>Eliminar cuenta (Reset)</span>
+            </button>
+          </div>
+
+          <!-- License Verification Form -->
+          <form class="auth-form" id="form-license" style="display:none">
+            <div style="width: 64px; height: 64px; background: rgba(16, 185, 129, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" style="width: 32px; height: 32px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3 style="margin-bottom: 8px; text-align: center;">Introduce tu Licencia</h3>
+            <p class="auth-subtitle" style="margin-bottom: 24px; font-size: 0.95rem; text-align: center;">
+              Tu solicitud ha sido aprobada. Introduce el código PV-XXXXXXXX enviado a tu correo.
+            </p>
+            <div class="form-group">
+              <label for="license-code">Código de Licencia</label>
+              <div class="input-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3m-4 5h10"/></svg>
+                <input type="text" id="license-code" placeholder="PV-XXXXXXXX" required style="font-family: var(--font-mono); text-transform: uppercase;">
+              </div>
+            </div>
+            <div class="auth-error" id="license-error" style="display:none"></div>
+            <button type="submit" class="btn-primary auth-submit" id="btn-verify-license">
+              <span>Activar Licencia</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+            </button>
+            <button type="button" class="btn-secondary btn-back-to-login" style="margin-top: 16px; width: 100%; border: none; background: rgba(255,255,255,0.05);">
+              <span>Volver</span>
+            </button>
+            <button type="button" class="btn-secondary btn-delete-test-account" style="margin-top: 16px; width: 100%; border: none; background: rgba(239, 68, 68, 0.1); color: #ef4444; font-size: 0.8rem;">
+              <span>Eliminar cuenta (Reset)</span>
+            </button>
+          </form>
+
+
+
+        </div>
+
+        <p class="auth-footer-text">Datos seguros almacenados localmente en tu navegador</p>
+      </div>
+    </div>
+
+
+    <!-- Header -->
+    <header class="app-header" id="app-header">
+      <div class="header-left">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M4 24L10 16L16 20L22 8L28 12" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs><linearGradient id="logoGrad" x1="4" y1="24" x2="28" y2="8"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
+            </svg>
+          </div>
+          <span class="logo-text">PortfolioVision</span>
+        </div>
+      </div>
+      <nav class="header-nav">
+        <button class="nav-btn active" data-view="dashboard" id="nav-dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-btn" data-view="holdings" id="nav-holdings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          <span>Holdings</span>
+        </button>
+        <button class="nav-btn" data-view="news" id="nav-news">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+          <span>Noticias</span>
+        </button>
+        <button class="nav-btn" data-view="discover" id="nav-discover">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><path d="M11 8v6M8 11h6" stroke-opacity="0.3"/></svg>
+          <span>Descubrir</span>
+        </button>
+        <button class="nav-btn" data-view="tools" id="nav-tools">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.77 3.77z"/><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.77 3.77z" opacity="0.4"/></svg>
+          <span>Herramientas</span>
+        </button>
+      </nav>
+      <div class="header-right">
+        <div class="market-status" id="market-status">
+          <div class="status-dot"></div>
+          <span>Mercado cerrado</span>
+        </div>
+        
+        <div class="portfolio-selector-container" id="portfolio-selector-container" style="display: none; align-items: center; gap: 8px;">
+          <select id="portfolio-selector" class="custom-select portfolio-select">
+          </select>
+          <button id="btn-manage-portfolios" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center;" title="Gestionar portfolios">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          </button>
+        </div>
+
+        <button class="btn-add-position" id="btn-add-position">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Añadir posición</span>
+        </button>
+        <div class="user-menu" id="user-menu">
+          <button class="user-avatar-btn" id="user-avatar-btn">
+            <span class="user-avatar" id="user-avatar">U</span>
+          </button>
+          <div class="user-dropdown" id="user-dropdown" style="display:none">
+            <div class="user-dropdown-header">
+              <span class="user-dropdown-name" id="user-dropdown-name">Usuario</span>
+              <span class="user-dropdown-email" id="user-dropdown-email">email@ejemplo.com</span>
+            </div>
+            <div class="user-dropdown-divider"></div>
+            <button class="user-dropdown-item" id="btn-user-manage-portfolios">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              Gestionar Portfolios
+            </button>
+            <button class="user-dropdown-item" id="btn-toggle-theme">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="sun-icon"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="18.36" x2="5.64" y2="16.92"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="moon-icon" style="display:none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+              <span id="theme-text">Modo claro</span>
+            </button>
+            <button class="user-dropdown-item" id="btn-logout" style="color: var(--red);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+      <!-- Admin Panel (Inside main-content for styling) -->
+      <div id="admin-panel" style="display: none;">
+        <div class="summary-header">
+          <h1 class="summary-title">Panel de Control (Admin)</h1>
+          <p class="summary-subtitle">Gestiona los usuarios y accesos de PortfolioVision</p>
+        </div>
+
+        <div class="glass-card" style="margin-top: 24px; padding: 24px; overflow-x: auto;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h2 style="font-size: 1.25rem; font-weight: 700;">Listado de Usuarios</h2>
+            <button id="btn-refresh-users" class="btn-secondary" style="font-size: 0.85rem; padding: 8px 16px;">Actualizar Lista</button>
+          </div>
+          
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th>Estado</th>
+                <th>Registro</th>
+                <th style="text-align: right;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-list">
+              <!-- Cargando usuarios... -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Dashboard View -->
+      <div class="view view-dashboard active" id="view-dashboard">
+        <!-- Portfolio Summary -->
+        <div class="summary-row" id="summary-row">
+          <div class="summary-card summary-total glass-card" id="summary-total">
+            <div class="summary-label">Valor total del portfolio</div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div class="summary-value" id="total-value" style="cursor: pointer;" title="Clic para cambiar divisa">$0.00</div>
+              <select id="currency-selector" class="custom-select currency-select">
+                <option value="USD">USD $</option>
+                <option value="EUR">EUR €</option>
+                <option value="GBP">GBP £</option>
+                <option value="JPY">JPY ¥</option>
+                <option value="CHF">CHF ₣</option>
+                <option value="CAD">CAD $</option>
+                <option value="AUD">AUD $</option>
+              </select>
+            </div>
+            <div class="summary-change" id="total-change">
+              <span class="change-amount">+$0.00</span>
+              <span class="change-percent">(+0.00%)</span>
+            </div>
+          </div>
+          <div class="summary-card glass-card" id="summary-invested">
+            <div class="summary-label">Total invertido</div>
+            <div class="summary-value" id="invested-value">$0.00</div>
+            <div class="summary-sub">Capital inicial</div>
+          </div>
+          <div class="summary-card glass-card" id="summary-gain">
+            <div class="summary-label">Ganancia / Pérdida</div>
+            <div class="summary-value" id="gain-value">$0.00</div>
+            <div class="summary-change" id="gain-percent">
+              <span class="change-percent">(+0.00%)</span>
+            </div>
+          </div>
+          <div class="summary-card glass-card" id="summary-daily">
+            <div class="summary-label">Cambio diario</div>
+            <div class="summary-value" id="daily-value">$0.00</div>
+            <div class="summary-change" id="daily-percent">
+              <span class="change-percent">(+0.00%)</span>
+            </div>
+          </div>
+          <div class="summary-card glass-card" id="summary-dividends-earned">
+            <div class="summary-label">Dividendos</div>
+            <div class="summary-value" id="dividends-value" style="color: var(--green);">$0.00</div>
+            <div class="summary-sub" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Acumulados</div>
+          </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="charts-row">
+          <div class="chart-card glass-card chart-large" id="chart-performance-card">
+            <div class="chart-header">
+              <h3>Rendimiento del portfolio</h3>
+              <div class="chart-timeframe" id="perf-timeframe">
+                <button class="tf-btn" data-range="1d">1D</button>
+                <button class="tf-btn" data-range="5d">5D</button>
+                <button class="tf-btn" data-range="1mo">1M</button>
+                <button class="tf-btn active" data-range="3mo">3M</button>
+                <button class="tf-btn" data-range="6mo">6M</button>
+                <button class="tf-btn" data-range="1y">1A</button>
+                <button class="tf-btn" data-range="ytd">YTD</button>
+              </div>
+            </div>
+            <div id="portfolio-chart-stats" style="text-align: right; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.95rem; font-weight: 600;"></div>
+            <div class="chart-container" id="chart-performance-container">
+              <canvas id="chart-performance"></canvas>
+            </div>
+          </div>
+          <div class="chart-card glass-card chart-small">
+            <div class="chart-header">
+              <h3>Distribución del portfolio</h3>
+            </div>
+            <div class="chart-container chart-container-donut" id="chart-allocation-container">
+              <canvas id="chart-allocation"></canvas>
+            </div>
+            <div class="allocation-legend" id="allocation-legend"></div>
+          </div>
+        </div>
+
+        <!-- Charts Row 2 -->
+        <div class="charts-row">
+          <div class="chart-card glass-card chart-medium">
+            <div class="chart-header">
+              <h3>Ganancia por posición</h3>
+            </div>
+            <div class="chart-container" id="chart-gainloss-container">
+              <canvas id="chart-gainloss"></canvas>
+            </div>
+          </div>
+          <div class="chart-card glass-card chart-medium">
+            <div class="chart-header">
+              <h3>Rendimiento individual (%)</h3>
+            </div>
+            <div class="chart-container" id="chart-individual-container">
+              <canvas id="chart-individual"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Removed Top Performers -->
+
+        <!-- Empty State -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+          <div class="empty-icon">
+            <svg viewBox="0 0 120 120" fill="none">
+              <circle cx="60" cy="60" r="50" stroke="url(#emptyGrad)" stroke-width="2" stroke-dasharray="8 4" opacity="0.4"/>
+              <path d="M40 75L55 55L65 65L80 45" stroke="url(#emptyGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="80" cy="45" r="4" fill="url(#emptyGrad)"/>
+              <defs><linearGradient id="emptyGrad" x1="30" y1="80" x2="90" y2="40"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
+            </svg>
+          </div>
+          <h2>Tu portfolio está vacío</h2>
+          <p>Empieza añadiendo tu primera posición para ver tus inversiones en tiempo real.</p>
+          <button class="btn-add-first" id="btn-add-first">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Añadir primera posición
+          </button>
+        </div>
+      </div>
+
+      <!-- Holdings View -->
+      <div class="view view-holdings" id="view-holdings">
+        <div class="holdings-header">
+          <h2>Mis posiciones</h2>
+          <div class="holdings-controls">
+            <div class="search-holdings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Buscar en mis posiciones..." id="search-holdings-input">
+            </div>
+            <div class="sort-holdings">
+              <select id="sort-holdings-select">
+                <option value="value-desc">Mayor valor</option>
+                <option value="value-asc">Menor valor</option>
+                <option value="gain-desc">Mayor ganancia %</option>
+                <option value="gain-asc">Mayor pérdida %</option>
+                <option value="name-asc">Nombre A-Z</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="holdings-grid" id="holdings-grid"></div>
+      </div>
+
+      <!-- News View -->
+      <div class="view view-news" id="view-news">
+        <div class="holdings-header" style="margin-bottom: 24px;">
+          <h2>Noticias</h2>
+          <div class="holdings-controls">
+            <div class="search-holdings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Buscar ticker (ej: AAPL)..." id="search-news-input">
+            </div>
+            <div class="news-tabs" id="global-news-tabs" style="display:flex; gap:8px;">
+              <button class="detail-tab active" data-news-type="portfolio" style="padding:8px 16px; border-radius:var(--radius-sm); border:1px solid var(--border-card); background:var(--bg-card); color:var(--text-primary); cursor:pointer; font-weight: 500;">Mi Portfolio</button>
+              <button class="detail-tab" data-news-type="general" style="padding:8px 16px; border-radius:var(--radius-sm); border:1px solid transparent; background:transparent; color:var(--text-muted); cursor:pointer; font-weight: 500;">Mercado General</button>
+            </div>
+          </div>
+        </div>
+        <div id="global-news-container" style="display: flex; flex-direction: column; max-width: 1000px; margin: 0 auto; gap: 16px;">
+          <div class="loading-spinner"></div>
+        </div>
+      </div>
+
+      <!-- Discover View -->
+      <div class="view view-discover" id="view-discover">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+          
+          <!-- Discover Header / Search -->
+          <div class="discover-hero glass-card" style="padding: 32px; text-align: center; border-radius: var(--radius-lg);">
+            <h2 class="discover-title" style="font-size: 2rem; margin-bottom: 16px; font-weight: 700;">Encuentra tu próxima oportunidad</h2>
+            <div class="search-holdings discover-search-bar" style="max-width: 600px; margin: 0 auto; border-radius: 50px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Busca empresas, tickers o ETFs para investigar..." id="discover-search-input">
+              <button id="btn-clear-discover" style="display: none; width: 28px; height: 28px; border: none; border-radius: 50%; background: rgba(255,255,255,0.05); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; margin-left: 8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width: 14px; height: 14px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            <div id="discover-search-results" style="margin-top: 24px; display: none; flex-direction: column; gap: 16px; text-align: left;"></div>
+          </div>
+
+          <!-- Market Overview Sections (hidden during search) -->
+          <div id="discover-market-overview" style="display: flex; flex-direction: column; gap: 32px;">
+            <div>
+              <h3 class="discover-section-title" style="margin-bottom: 16px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" style="width:20px; height:20px;"><path d="M21 12V7H5a2 2 0 010-4h14v4M3 5v14a2 2 0 002 2h16v-5M18 11h.01"/></svg>
+                Índices Mundiales
+              </h3>
+              <div class="holdings-grid" id="discover-indices-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));"></div>
+            </div>
+
+            <div>
+              <h3 class="discover-section-title" style="margin-bottom: 16px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="width:20px; height:20px;"><circle cx="12" cy="12" r="8"/><path d="M12 7v10M9 12h6"/></svg>
+                Divisas y Cripto
+              </h3>
+              <div class="holdings-grid" id="discover-currencies-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));"></div>
+            </div>
+
+            <div>
+              <h3 class="discover-section-title" style="margin-bottom: 16px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" style="width:20px; height:20px;"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>
+                Tendencias
+              </h3>
+              <div class="holdings-grid" id="discover-trending-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));"></div>
+            </div>
+
+            <div>
+              <h3 class="discover-section-title" style="margin-bottom: 16px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" style="width:20px; height:20px;"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                Mayores Subidas
+              </h3>
+              <div class="holdings-grid" id="discover-gainers-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));"></div>
+            </div>
+
+            <div>
+              <h3 class="discover-section-title" style="margin-bottom: 16px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" style="width:20px; height:20px;"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                Mayores Bajadas
+              </h3>
+              <div class="holdings-grid" id="discover-losers-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tools View -->
+      <div class="view view-tools" id="view-tools">
+        <div style="max-width: 1000px; margin: 0 auto;">
+          <div class="holdings-header">
+            <h2>Herramientas Financieras</h2>
+          </div>
+          
+          <div class="holdings-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+            <!-- Calculator Card -->
+            <div class="glass-card" style="padding: 24px; display: flex; flex-direction: column; height: 100%;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                <div style="padding: 10px; background: rgba(99, 102, 241, 0.1); border-radius: 12px; color: var(--accent-primary);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><line x1="16" y1="10" x2="16" y2="10"/><line x1="12" y1="10" x2="12" y2="10"/><line x1="8" y1="10" x2="8" y2="10"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="18" x2="12" y2="18"/><line x1="8" y1="18" x2="8" y2="18"/></svg>
+                </div>
+                <h3 style="font-size: 1.1rem; font-weight: 700;">Calculadora de Interés Compuesto</h3>
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px; flex: 1;">Proyecta el crecimiento de tu patrimonio a largo plazo basándote en tus aportaciones y rentabilidad esperada.</p>
+              <button class="btn-secondary" style="width: 100%;" id="btn-open-calc">Abrir calculadora</button>
+            </div>
+
+            <!-- Diversification Analysis -->
+            <div class="glass-card" style="padding: 24px; display: flex; flex-direction: column; height: 100%;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                <div style="padding: 10px; background: rgba(16, 185, 129, 0.1); border-radius: 12px; color: var(--green);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;"><path d="M21.21 15.89A10 10 0 118 2.83M22 12A10 10 0 0012 2v10z"/></svg>
+                </div>
+                <h3 style="font-size: 1.1rem; font-weight: 700;">Analizador de Diversificación</h3>
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px; flex: 1;">Analiza la correlación entre tus activos y descubre si estás demasiado expuesto a un sector o región específica.</p>
+              <button class="btn-secondary" style="width: 100%;" id="btn-open-divers">Analizar cartera</button>
+            </div>
+
+            <!-- Tax Simulator -->
+            <div class="glass-card" style="padding: 24px; display: flex; flex-direction: column; height: 100%;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                <div style="padding: 10px; background: rgba(245, 158, 11, 0.1); border-radius: 12px; color: var(--yellow);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                </div>
+                <h3 style="font-size: 1.1rem; font-weight: 700;">Simulador de Impuestos</h3>
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px; flex: 1;">Calcula el impacto fiscal de tus plusvalías y dividendos según tu residencia fiscal y tramos impositivos.</p>
+              <button class="btn-secondary" style="width: 100%;" id="btn-open-tax">Simular impuestos</button>
+            </div>
+
+            <!-- Market Benchmark Card -->
+            <div class="glass-card" style="padding: 24px; display: flex; flex-direction: column; height: 100%;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                <div style="padding: 10px; background: rgba(99, 102, 241, 0.1); border-radius: 12px; color: var(--accent);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>
+                </div>
+                <h3 style="font-size: 1.1rem; font-weight: 700;">Benchmark de Mercado</h3>
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px; flex: 1;">¿Qué habría pasado si hubieras invertido en el S&P 500 en lugar de en tus acciones? Compara tu rentabilidad.</p>
+              <button class="btn-secondary" style="width: 100%;" id="btn-open-benchmark">Comparar rendimientos</button>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Add Position Modal -->
+    <div class="modal-overlay" id="modal-add" style="display: none;">
+      <div class="modal glass-card" id="modal-add-content">
+        <div class="modal-header">
+          <h2>Añadir nueva posición</h2>
+          <button class="modal-close" id="modal-close-add">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="input-symbol">Símbolo / Ticker</label>
+            <div class="search-input-wrap">
+              <input type="text" id="input-symbol" placeholder="Ej: AAPL, MSFT, VOO..." autocomplete="off">
+              <div class="search-results" id="search-results" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="selected-stock" id="selected-stock" style="display: none;">
+            <div class="selected-stock-info" style="display: flex; align-items: center; gap: 12px;">
+              <img id="selected-logo" src="" style="width: 28px; height: 28px; border-radius: 50%; object-fit: contain; background: transparent; padding: 0; filter: drop-shadow(0 0 3px rgba(255,255,255,0.4)); display: none;" onerror="window.handleLogoError(this, document.getElementById('selected-symbol')?.textContent || '?')">
+              <div>
+                <span class="selected-symbol" id="selected-symbol" style="display: block; font-weight: 600;"></span>
+                <span class="selected-name" id="selected-name" style="display: block; font-size: 0.8rem; color: var(--text-muted);"></span>
+              </div>
+            </div>
+            <span class="selected-price" id="selected-current-price"></span>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="input-shares">Nº de acciones</label>
+              <input type="number" id="input-shares" placeholder="Ej: 10" min="0.0001" step="any">
+            </div>
+            <div class="form-group">
+              <label for="input-price" id="label-price">Precio de compra</label>
+              <input type="number" id="input-price" placeholder="Ej: 150.00" min="0.01" step="any">
+            </div>
+          </div>
+          <div class="form-row" style="margin-top: 16px;">
+            <div class="form-group">
+              <label for="input-date">Fecha de compra</label>
+              <input type="date" id="input-date">
+            </div>
+            <div class="form-group">
+              <label for="input-time">Hora (opcional)</label>
+              <input type="time" id="input-time">
+            </div>
+          </div>
+          
+          <div style="margin-top: 16px;">
+            <button type="button" id="btn-toggle-exchange" class="btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; padding: 10px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><path d="M7 16V4M7 4L3 8M7 4L11 8M17 8v12M17 20l4-4M17 20l-4-4"/></svg>
+              <span>Añadir cambio de divisa (Opcional)</span>
+            </button>
+          </div>
+
+          <div id="exchange-section" style="display: none; margin-top: 12px; padding: 16px; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="select-source-currency">Moneda de origen</label>
+                <select id="select-source-currency" class="custom-select" style="width: 100%;">
+                  <option value="EUR" selected>EUR (€)</option>
+                  <option value="USD">USD ($)</option>
+                  <option value="GBP">GBP (£)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="input-exchange-rate" id="label-exchange-rate">Tipo de cambio</label>
+                <div style="position: relative; display: flex; align-items: center;">
+                  <input type="number" id="input-exchange-rate" placeholder="Ej: 1.0850" step="any" style="flex: 1;">
+                  <button type="button" id="btn-fetch-rate" title="Obtener cambio histórico" style="position: absolute; right: 8px; background: var(--accent-primary); border: none; border-radius: 4px; color: white; padding: 4px 8px; font-size: 0.7rem; cursor: pointer; transition: opacity 0.2s;">
+                    Auto
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div id="exchange-rate-help" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;"></div>
+          </div>
+          <div class="form-summary" id="form-summary" style="display: none;">
+            <div class="form-summary-row">
+              <span>Inversión total</span>
+              <span id="form-total-investment">$0.00</span>
+            </div>
+            <div class="form-summary-row">
+              <span>Valor actual estimado</span>
+              <span id="form-current-value">$0.00</span>
+            </div>
+            <div class="form-summary-row">
+              <span>Ganancia / Pérdida</span>
+              <span id="form-gain-loss">$0.00</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" id="btn-cancel-add">Cancelar</button>
+          <button class="btn-primary" id="btn-confirm-add" disabled>Añadir al portfolio</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stock Detail Modal -->
+    <div class="modal-overlay" id="modal-detail" style="display: none;">
+      <div class="modal modal-detail glass-card" id="modal-detail-content">
+        <div class="modal-header">
+          <div class="detail-header-info" style="display: flex; align-items: center; gap: 12px;">
+            <img id="detail-logo" src="" alt="" style="width: 40px; height: 40px; border-radius: 50%; object-fit: contain; background: transparent; padding: 0; filter: drop-shadow(0 0 3px rgba(255,255,255,0.4)); display: none;" onerror="window.handleLogoError(this, document.getElementById('detail-symbol')?.textContent || '?')">
+            <div>
+              <h2 id="detail-symbol" style="margin: 0;">AAPL</h2>
+              <span class="detail-name" id="detail-name">Apple Inc.</span>
+            </div>
+          </div>
+          <button class="modal-close" id="modal-close-detail">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="detail-price-section">
+            <div class="detail-price" id="detail-price">$0.00</div>
+            <div class="detail-change" id="detail-change">
+              <span class="change-amount">+$0.00</span>
+              <span class="change-percent">(+0.00%)</span>
+            </div>
+          </div>
+          
+          <div class="detail-tabs" style="display:flex; gap:8px; margin-bottom:24px; justify-content: center;">
+            <button class="detail-tab active" data-tab="personal" style="padding:10px 20px; border-radius:var(--radius-sm); border:1px solid var(--border-card); background:var(--bg-card); color:var(--text-primary); cursor:pointer; font-weight: 600; transition: all 0.2s;">Mi Posición</button>
+            <button class="detail-tab" data-tab="data" style="padding:10px 20px; border-radius:var(--radius-sm); border:1px solid transparent; background:transparent; color:var(--text-muted); cursor:pointer; font-weight: 600; transition: all 0.2s;">Datos</button>
+            <button class="detail-tab" data-tab="events" style="padding:10px 20px; border-radius:var(--radius-sm); border:1px solid transparent; background:transparent; color:var(--text-muted); cursor:pointer; font-weight: 600; transition: all 0.2s;">Eventos</button>
+            <button class="detail-tab" data-tab="history" style="padding:10px 20px; border-radius:var(--radius-sm); border:1px solid transparent; background:transparent; color:var(--text-muted); cursor:pointer; font-weight: 600; transition: all 0.2s;">Historial</button>
+          </div>
+
+          <div id="detail-tab-personal" class="detail-tab-content">
+            <div class="detail-position-section" id="detail-position-section" style="margin-bottom: 24px;">
+              <div class="detail-position-grid" id="detail-position-grid">
+                <!-- Position details populated by JS -->
+              </div>
+            </div>
+            <div class="detail-chart-section">
+              <div class="chart-timeframe" id="detail-timeframe">
+                <button class="tf-btn" data-range="1d">1D</button>
+                <button class="tf-btn" data-range="5d">5D</button>
+                <button class="tf-btn active" data-range="1mo">1M</button>
+                <button class="tf-btn" data-range="3mo">3M</button>
+                <button class="tf-btn" data-range="6mo">6M</button>
+                <button class="tf-btn" data-range="1y">1A</button>
+                <button class="tf-btn" data-range="max">MAX</button>
+              </div>
+              <div id="detail-chart-stats" style="text-align: right; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.95rem; font-weight: 600;"></div>
+              <div class="chart-container detail-chart-container">
+                <canvas id="chart-detail"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div id="detail-tab-data" class="detail-tab-content" style="display: none;">
+            <div class="detail-stats-grid" id="detail-stats-grid" style="margin-bottom: 24px;">
+              <!-- Stats populated by JS -->
+            </div>
+            
+            <div id="detail-overview" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6; background: rgba(255,255,255,0.03); padding: 16px; border-radius: 8px;">
+              <div class="loading-spinner"></div> Cargando resumen...
+            </div>
+
+            <div class="financial-charts">
+              <h3>Resultados Financieros Anuales (Ingresos vs Beneficio)</h3>
+              <div class="chart-container detail-chart-container" style="height: 220px; margin-bottom: 24px;">
+                <canvas id="chart-income"></canvas>
+              </div>
+              
+              <h3>Resultados Trimestrales (Ingresos vs Beneficio)</h3>
+              <div class="chart-container detail-chart-container" style="height: 220px; margin-bottom: 24px;">
+                <canvas id="chart-cashflow"></canvas>
+              </div>
+
+              <h3>Beneficio por Acción (EPS) Trimestral</h3>
+              <div class="chart-container detail-chart-container" style="height: 220px;">
+                <canvas id="chart-eps"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <div id="detail-tab-events" class="detail-tab-content" style="display: none;">
+            <div id="events-timeline" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+              <!-- Timeline items populated by JS -->
+            </div>
+            <div id="dividend-stats" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- Dividend stats populated by JS -->
+            </div>
+          </div>
+
+          <div id="detail-tab-history" class="detail-tab-content" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h3 style="margin: 0; font-size: 1rem;">Transacciones</h3>
+            </div>
+            <div id="history-timeline" style="display: flex; flex-direction: column; gap: 0;">
+              <!-- Transaction history populated by JS -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-danger" id="btn-delete-position">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+            Eliminar todo
+          </button>
+          <button class="btn-primary" id="btn-sell-position">Vender acciones</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sell Position Modal -->
+    <div class="modal-overlay" id="modal-sell" style="display: none;">
+      <div class="modal glass-card" id="modal-sell-content">
+        <div class="modal-header">
+          <h2>Vender <span id="sell-symbol"></span></h2>
+          <button class="modal-close" id="modal-close-sell">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p style="color: var(--text-secondary); margin-bottom: 16px;">
+            Tienes un total de <strong style="color: var(--text-primary); font-family: var(--font-mono);" id="sell-max-shares">0</strong> acciones.
+          </p>
+          <div class="form-row" style="display: flex; gap: 16px; margin-bottom: 16px;">
+            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+              <label for="input-sell-shares">Acciones a vender</label>
+              <input type="number" id="input-sell-shares" placeholder="Ej: 5" min="0.0001" step="any">
+            </div>
+            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+              <label for="input-sell-price">Precio de venta ($)</label>
+              <input type="number" id="input-sell-price" placeholder="Ej: 150.00" min="0.01" step="any">
+            </div>
+            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+              <label for="input-sell-date">Fecha de venta</label>
+              <input type="date" id="input-sell-date">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" id="btn-cancel-sell">Cancelar</button>
+          <button class="btn-primary" id="btn-confirm-sell">Confirmar venta</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manage Portfolios Modal -->
+    <div class="modal-overlay" id="modal-portfolios" style="display: none;">
+      <div class="modal glass-card" id="modal-portfolios-content">
+        <div class="modal-header">
+          <h2>Tus Portfolios</h2>
+          <button class="modal-close" id="modal-close-portfolios">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+          <div id="portfolios-list" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+            <!-- Portfolios will be listed here -->
+          </div>
+          
+          <div style="border-top: 1px solid var(--border-card); padding-top: 16px;">
+            <h3 style="font-size: 1rem; margin-bottom: 12px;">Añadir Nuevo Portfolio</h3>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="input-new-portfolio-name" placeholder="Nombre del portfolio..." class="custom-input" style="flex: 1;">
+              <button class="btn-primary" id="btn-create-portfolio" style="padding: 10px 16px;">Añadir</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container"></div>
+  </div>
+
+    <!-- Compound Interest Modal -->
+    <div class="modal-overlay" id="modal-calc" style="display: none;">
+      <div class="modal glass-card" style="max-width: 900px; padding: 32px;">
+        <div class="modal-header" style="margin-bottom: 24px;">
+          <h2 style="display: flex; align-items: center; gap: 12px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" style="width: 28px; height: 28px;"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><line x1="16" y1="10" x2="16" y2="10"/><line x1="12" y1="10" x2="12" y2="10"/><line x1="8" y1="10" x2="8" y2="10"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="18" x2="12" y2="18"/><line x1="8" y1="18" x2="8" y2="18"/></svg>
+            Calculadora de Interés Compuesto
+          </h2>
+          <button class="modal-close" id="modal-close-calc">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 32px;">
+          <!-- Inputs -->
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="form-group">
+              <label>Capital Inicial</label>
+              <input type="number" id="calc-initial" value="1000" step="100">
+            </div>
+            <div class="form-group">
+              <label>Contribución Recurrente</label>
+              <div style="display: flex; gap: 8px;">
+                <input type="number" id="calc-contribution" value="200" step="50" style="flex: 1;">
+                <select id="calc-frequency" style="width: 120px; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-card); background: var(--bg-card); color: var(--text-primary);">
+                  <option value="52">Semanal</option>
+                  <option value="12">Mensual</option>
+                  <option value="1">Anual</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Rentabilidad Anual Esperada (%)</label>
+              <input type="number" id="calc-rate" value="8" step="0.5">
+            </div>
+            <div class="form-group">
+              <label>Años de Inversión</label>
+              <input type="number" id="calc-years" value="20" step="1">
+            </div>
+            
+            <div class="glass-card" style="padding: 20px; background: rgba(99, 102, 241, 0.05); margin-top: 10px;">
+              <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Resultados Proyectados</div>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: var(--text-secondary);">Balance Final:</span>
+                  <span id="res-total" style="font-weight: 700; color: var(--accent-primary);">$0.00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: var(--text-secondary);">Total Invertido:</span>
+                  <span id="res-invested" style="font-weight: 600;">$0.00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: var(--text-secondary);">Intereses Totales:</span>
+                  <span id="res-interest" style="font-weight: 600; color: var(--green);">$0.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart Area -->
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="height: 350px; background: rgba(0,0,0,0.1); border-radius: var(--radius); border: 1px solid var(--border-card); padding: 16px;">
+              <canvas id="chart-calc"></canvas>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; line-height: 1.4;">
+              Nota: Esta proyección es orientativa y no garantiza rentabilidades futuras. Los cálculos no tienen en cuenta la inflación ni los impuestos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Diversification Analyzer Modal -->
+    <div class="modal-overlay" id="modal-divers" style="display: none;">
+      <div class="modal glass-card" style="max-width: 1000px; padding: 32px;">
+        <div class="modal-header" style="margin-bottom: 24px;">
+          <h2 style="display: flex; align-items: center; gap: 12px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" style="width: 28px; height: 28px;"><path d="M21.21 15.89A10 10 0 118 2.83M22 12A10 10 0 0012 2v10z"/></svg>
+            Analizador de Diversificación
+          </h2>
+          <button class="modal-close" id="modal-close-divers">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 32px;">
+          <!-- Top Score Section -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; background: rgba(16, 185, 129, 0.05); padding: 24px; border-radius: var(--radius);">
+            <div style="text-align: center; border-right: 1px solid rgba(255,255,255,0.1);">
+              <div style="display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">
+                Health Score (Quant)
+                <span class="info-icon" data-tooltip="Calificación general de la salud de tu cartera basada en diversificación real y riesgo de concentración.">i</span>
+              </div>
+              <div id="divers-score" style="font-size: 2.5rem; font-weight: 800; color: var(--green);">--</div>
+              <div id="divers-score-label" style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-secondary);">Calculando...</div>
+            </div>
+            <div style="text-align: center; border-right: 1px solid rgba(255,255,255,0.1);">
+              <div style="display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">
+                Activos Efectivos (ENB)
+                <span class="info-icon" data-tooltip="El número real de inversiones independientes. Si tienes activos muy correlacionados, este número será menor al total de tus acciones.">i</span>
+              </div>
+              <div id="divers-enb" style="font-size: 2.5rem; font-weight: 800; color: var(--accent-primary);">--</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">Diversificación Real</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">
+                Concentración (HHI)
+                <span class="info-icon" data-tooltip="Índice que mide qué tan dependiente es tu cartera de unos pocos activos. Un valor bajo indica una mejor distribución del peso.">i</span>
+              </div>
+              <div id="divers-hhi" style="font-size: 2.5rem; font-weight: 800; color: var(--yellow);">--</div>
+              <div id="divers-hhi-label" style="font-size: 0.75rem; color: var(--text-secondary);">Índice Herfindahl</div>
+            </div>
+          </div>
+
+          <!-- Triple Layer Matrix & Blind Spots -->
+          <div class="glass-card" style="padding: 24px; margin-bottom: 32px; border: 1px solid rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.02);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+              <h3 style="font-size: 1.1rem; display: flex; align-items: center; gap: 10px; margin: 0;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" style="width: 20px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Matriz de Riesgo Geopolítico & Puntos Ciegos
+              </h3>
+              <div id="geopol-alert-badge" style="padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;"></div>
+            </div>
+            <div id="geopol-blind-spots" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+              <!-- Geopolitical alerts and analysis will be injected here -->
+            </div>
+          </div>
+          
+          <div class="glass-card" style="padding: 20px; background: rgba(255,255,255,0.02);">
+            <h3 id="divers-title" style="margin-bottom: 8px; font-size: 1.1rem; color: var(--green);">Analizador Quant Activo</h3>
+            <p id="divers-advice" style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">Evaluando correlaciones cruzadas, riesgos de cola y exposición real de ingresos...</p>
+          </div>
+
+          <!-- Charts Section -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+            <div class="glass-card" style="padding: 20px;">
+              <h3 style="font-size: 1rem; margin-bottom: 20px; text-align: center;">Distribución por Sector</h3>
+              <div style="height: 250px;">
+                <canvas id="chart-divers-sector"></canvas>
+              </div>
+              <div id="divers-sector-legend" style="margin-top: 16px; font-size: 0.85rem;"></div>
+            </div>
+            <div class="glass-card" style="padding: 20px;">
+              <h3 style="font-size: 1rem; margin-bottom: 20px; text-align: center;">Distribución por Región</h3>
+              <div style="height: 250px;">
+                <canvas id="chart-divers-region"></canvas>
+              </div>
+              <div id="divers-region-legend" style="margin-top: 16px; font-size: 0.85rem;"></div>
+            </div>
+          </div>
+
+          <!-- Asset Class & Risk Contribution -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+            <div class="glass-card" style="padding: 24px;">
+              <h3 style="font-size: 1rem; margin-bottom: 16px; display: flex; align-items: center;">
+                Contribución al Riesgo por Activo
+                <span class="info-icon" data-tooltip="Muestra cuánto riesgo aporta cada activo al total de la cartera. Los activos más volátiles suelen aportar más riesgo.">i</span>
+              </h3>
+              <div style="height: 250px;">
+                <canvas id="chart-divers-risk-contrib"></canvas>
+              </div>
+            </div>
+            <div class="glass-card" style="padding: 24px;">
+              <h3 style="font-size: 1rem; margin-bottom: 16px; display: flex; align-items: center;">
+                Exposición Real de Ingresos (Revenue)
+                <span class="info-icon" data-tooltip="Analiza dónde generan realmente sus ingresos las empresas (ej. Apple vende en todo el mundo, no solo en EE.UU.).">i</span>
+              </h3>
+              <div style="height: 250px;">
+                <canvas id="chart-divers-revenue"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stress Test & Rebalancing & Currency -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;">
+            <div class="glass-card" style="padding: 24px; border-left: 4px solid var(--red);">
+              <h3 style="font-size: 1rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                Stress Test (Escenarios)
+              </h3>
+              <div id="divers-stress-test" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Stress test results -->
+              </div>
+            </div>
+            <div class="glass-card" style="padding: 24px; border-left: 4px solid var(--accent-primary);">
+              <h3 style="font-size: 1rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px;"><path d="M16 3h5v5M4 20L20 4M21 16v5h-5M15 15l5 5M4 4l5 5"/></svg>
+                Rebalance Pro
+                <span class="info-icon" data-tooltip="Sugerencias algorítmicas para mover tu cartera hacia la 'Frontera Eficiente', optimizando el retorno por cada unidad de riesgo.">i</span>
+              </h3>
+              <div id="divers-rebalance" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Rebalance suggestions -->
+              </div>
+            </div>
+            <div class="glass-card" style="padding: 24px; border-left: 4px solid var(--yellow);">
+              <h3 style="font-size: 1rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px;"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                Impacto de Divisas
+                <span class="info-icon" data-tooltip="Simulación del impacto en tu patrimonio ante variaciones de moneda. Mide el riesgo de listing vs moneda operativa.">i</span>
+              </h3>
+              <div id="divers-currency-impact" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Currency simulation -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- Tax Simulator Modal -->
+  <div id="modal-tax" class="modal-overlay" style="display: none;">
+    <div class="modal glass-card" style="max-width: 1100px; padding: 0; overflow: hidden; height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header" style="padding: 24px 32px; border-bottom: 1px solid var(--border-card); flex-shrink: 0;">
+        <h2 style="display: flex; align-items: center; gap: 12px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="2" style="width: 28px; height: 28px;"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          Simulador de Impuestos (Grado Institucional)
+        </h2>
+        <button class="modal-close" id="modal-close-tax">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 0; overflow: hidden; display: flex; flex: 1;">
+        <!-- Sidebar Controls -->
+        <div style="width: 320px; background: rgba(0,0,0,0.1); border-right: 1px solid var(--border-card); padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 24px;">
+          <div>
+            <label style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px;">Residencia Fiscal</label>
+            <select id="tax-residence" class="custom-select" style="width: 100%;">
+              <option value="ES">España (General)</option>
+              <option value="ES_CANARIAS">España (Canarias)</option>
+              <option value="ES_NAVARRA">España (Navarra)</option>
+              <option value="ES_PAIS_VASCO">España (País Vasco)</option>
+              <option value="US">USA (Non-Resident Alien)</option>
+            </select>
+          </div>
+
+          <div class="glass-card" style="padding: 16px; border: 1px solid rgba(245, 158, 11, 0.2); background: rgba(245, 158, 11, 0.02);">
+            <label style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--yellow); margin-bottom: 12px; font-weight: 700;">Simulador de Salida</label>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div class="form-group">
+                <label style="font-size: 0.8rem;">Cantidad a retirar (€)</label>
+                <div style="position: relative;">
+                  <input type="number" id="tax-exit-amount" placeholder="Ej: 5000" style="width: 100%; padding: 12px 16px; padding-right: 60px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-card); border-radius: 8px; color: var(--text-primary); font-size: 1rem;">
+                  <button id="btn-tax-exit-max" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: var(--accent-primary); border: none; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: opacity 0.2s;">MAX</button>
+                </div>
+              </div>
+              <button class="btn-primary" id="btn-run-tax-exit" style="width: 100%; padding: 12px; font-size: 0.85rem; font-weight: 700;">Calcular Optimización</button>
+            </div>
+          </div>
+
+          <div class="glass-card" style="padding: 16px; border: 1px solid rgba(16, 185, 129, 0.2); background: rgba(16, 185, 129, 0.02);">
+            <label style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #10b981; margin-bottom: 12px; font-weight: 700;">Venta Individual</label>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div class="form-group">
+                <label style="font-size: 0.8rem;">Seleccionar Activo</label>
+                <select id="tax-single-symbol" class="custom-select" style="width: 100%;">
+                  <option value="">Cargando...</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label style="font-size: 0.8rem;">Cantidad a vender (€)</label>
+                <div style="position: relative;">
+                  <input type="number" id="tax-single-amount" placeholder="Ej: 1000" style="width: 100%; padding: 12px 16px; padding-right: 60px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-card); border-radius: 8px; color: var(--text-primary); font-size: 1rem;">
+                  <button id="btn-tax-single-max" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: #10b981; border: none; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; cursor: pointer;">MAX</button>
+                </div>
+              </div>
+              <button class="btn-primary" id="btn-run-single-tax" style="width: 100%; padding: 12px; font-size: 0.85rem; font-weight: 700; background: #10b981; border-color: #10b981;">Simular Venta</button>
+            </div>
+          </div>
+
+          <div>
+            <label style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 12px;">Desglose de Tramos (Ahorro)</label>
+            <div id="tax-brackets-list" style="display: flex; flex-direction: column; gap: 8px; font-size: 0.8rem;">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Results Area -->
+        <div style="flex: 1; padding: 32px; overflow-y: auto; display: flex; flex-direction: column; gap: 32px;">
+          
+          <!-- Summary Cards -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+            <div class="glass-card" style="padding: 24px; border-top: 4px solid var(--yellow);">
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Impuesto Estimado Total</div>
+              <div id="tax-total-liability" style="font-size: 1.8rem; font-weight: 800; color: var(--text-primary);">$0.00</div>
+              <div id="tax-effective-rate" style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px;">Tipo efectivo: 0.00%</div>
+            </div>
+            <div class="glass-card" style="padding: 24px; border-top: 4px solid var(--green);">
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Plusvalías Realizadas</div>
+              <div id="tax-realized-gains" style="font-size: 1.8rem; font-weight: 800; color: var(--green);">$0.00</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px;">Año fiscal actual</div>
+            </div>
+            <div class="glass-card" style="padding: 24px; border-top: 4px solid var(--accent-primary);">
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Ahorro Potencial (Harvest)</div>
+              <div id="tax-potential-harvest" style="font-size: 1.8rem; font-weight: 800; color: var(--accent-primary);">$0.00</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px;">Compensando pérdidas</div>
+            </div>
+          </div>
+
+          <!-- Exit Strategy Suggestions (Hidden by default) -->
+          <div id="tax-exit-strategy" style="display: none;">
+            <h3 style="font-size: 1rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: var(--yellow);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px;"><path d="M16 3h5v5M4 20L20 4M21 16v5h-5M15 15l5 5M4 4l5 5"/></svg>
+              Estrategia de Salida Optimizada
+            </h3>
+            <div class="glass-card" style="padding: 24px; border: 1px solid rgba(245, 158, 11, 0.3);">
+              <div id="tax-exit-details" style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Exit details injected here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Tax-Loss Harvesting & Alerts -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+            <div>
+              <h3 style="font-size: 1rem; margin-bottom: 16px;">Oportunidades de Optimización</h3>
+              <div id="tax-harvesting-list" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Opportunities -->
+              </div>
+            </div>
+            <div>
+              <h3 style="font-size: 1rem; margin-bottom: 16px; color: var(--red);">Alertas Fiscales (Regla 2 Meses)</h3>
+              <div id="tax-alerts-list" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Alerts -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Position Breakdown -->
+          <div>
+            <h3 style="font-size: 1rem; margin-bottom: 16px;">Desglose Fiscal por Posición (FIFO)</h3>
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                <thead>
+                  <tr style="text-align: left; border-bottom: 1px solid var(--border-card); color: var(--text-muted);">
+                    <th style="padding: 12px 8px;">Activo</th>
+                    <th style="padding: 12px 8px;">Beneficio</th>
+                    <th style="padding: 12px 8px;">Efecto Divisa</th>
+                    <th style="padding: 12px 8px;">Plusvalía Total</th>
+                    <th style="padding: 12px 8px;">Impuesto Est.</th>
+                    <th style="padding: 12px 8px;">Neto Real</th>
+                  </tr>
+                </thead>
+                <tbody id="tax-positions-table">
+                  <!-- Rows injected by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Market Benchmark Modal -->
+  <div id="modal-benchmark" class="modal-overlay" style="display: none;">
+    <div class="modal glass-card" style="max-width: 900px; padding: 32px;">
+      <div class="modal-header" style="margin-bottom: 24px;">
+        <h2 style="display: flex; align-items: center; gap: 12px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" style="width: 28px; height: 28px;"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>
+          Benchmark de Mercado
+        </h2>
+        <button class="modal-close" id="modal-close-benchmark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 32px;">
+        <!-- Left: Controls & Summary -->
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+          <div>
+            <label style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px;">Comparar con Índice</label>
+            <select id="benchmark-index" class="custom-select" style="width: 100%;">
+              <option value="SPY">S&P 500 (SPY)</option>
+              <option value="QQQ">Nasdaq 100 (QQQ)</option>
+              <option value="DIA">Dow Jones (DIA)</option>
+              <option value="BTC-USD">Bitcoin (BTC)</option>
+              <option value="IWDA.AS">MSCI World (IWDA)</option>
+            </select>
+          </div>
+
+          <div class="glass-card" style="padding: 20px; background: rgba(99, 102, 241, 0.05);">
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Resumen Comparativo</div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="padding-bottom: 12px; border-bottom: 1px solid var(--border-card);">
+                <div style="font-size: 0.75rem; color: var(--text-secondary);">Tu Cartera Real</div>
+                <div id="bench-real-value" style="font-size: 1.25rem; font-weight: 700;">$0.00</div>
+                <div id="bench-real-gain" style="font-size: 0.85rem; font-weight: 600;">+0.00%</div>
+              </div>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-secondary);">Cartera Indexada</div>
+                <div id="bench-index-value" style="font-size: 1.25rem; font-weight: 700; color: var(--accent);">$0.00</div>
+                <div id="bench-index-gain" style="font-size: 0.85rem; font-weight: 600;">+0.00%</div>
+              </div>
+            </div>
+          </div>
+
+          <div id="bench-verdict" style="padding: 16px; border-radius: var(--radius-sm); font-size: 0.9rem; line-height: 1.4;">
+            <!-- Verdict will be injected here -->
+          </div>
+        </div>
+
+        <!-- Right side: Chart -->
+          <div style="flex: 1.2; min-height: 400px; display: flex; flex-direction: column;">
+            <div style="margin-bottom: 16px; font-weight: 600; color: var(--text-primary);">Valor de la Cartera</div>
+            <div style="flex: 1; position: relative;">
+              <canvas id="chart-benchmark-line"></canvas>
+            </div>
+          </div>
+          <div id="bench-details-list" style="max-height: 200px; overflow-y: auto; font-size: 0.8rem; display: flex; flex-direction: column; gap: 8px; padding-right: 8px;">
+            <!-- Individual position comparison -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

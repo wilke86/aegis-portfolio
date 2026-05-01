@@ -1,0 +1,20 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/yahoo/:path*",
+      "destination": "/api/yahoo"
+    },
+    {
+      "source": "/api/search/:path*",
+      "destination": "/api/yahoo"
+    },
+    {
+      "source": "/api/custom-yahoo/:path*",
+      "destination": "/api/yahoo"
+    },
+    {
+      "source": "/api/logo-fmp/:path*",
+      "destination": "https://financialmodelingprep.com/:path*"
+    }
+  ]
+}
