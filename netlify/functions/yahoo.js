@@ -4,61 +4,66 @@ let cachedCookie = '';
 let cachedCrumb = '';
 
 export const handler = async (event) => {
-  // En Netlify, cuando usamos redirects, la ruta viene en event.path
-  // Queremos extraer todo lo que va después de /api/yahoo o /.netlify/functions/yahoo
-  let path = event.path.replace('/.netlify/functions/yahoo', '').replace('/api/yahoo', '');
-  
-  // Si la ruta está vacía, no podemos hacer nada
-  if (!path || path === '/') {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: "No path provided" })
-    };
+  const fullPath = event.path;
+  let targetPath = '';
+  let domain = 'query1.finance.yahoo.com';
+
+  // Mapeo inteligente de rutas
+  if (fullPath.includes('/api/yahoo')) {
+    targetPath = fullPath.split('/api/yahoo')[1];
+  } else if (fullPath.includes('/api/custom-yahoo')) {
+    targetPath = fullPath.split('/api/custom-yahoo')[1];
+    // Ajustes para alias comunes
+    if (targetPath.startsWith('/quote')) targetPath = targetPath.replace('/quote', '/v7/finance/quote');
+    if (targetPath.startsWith('/financials')) targetPath = targetPath.replace('/financials', '/v10/finance/quoteSummary');
+    if (targetPath.startsWith('/quoteSummary')) targetPath = targetPath.replace('/quoteSummary', '/v10/finance/quoteSummary');
+  } else if (fullPath.includes('/api/search')) {
+    targetPath = fullPath.split('/api/search')[1];
+    domain = 'query2.finance.yahoo.com'; // La búsqueda suele ir a query2
+  } else {
+    targetPath = fullPath.replace('/.netlify/functions/yahoo', '');
   }
 
-  try {
-    if (!cachedCrumb || !cachedCookie) {
-      // Get Cookie
-      const cookieRes = await fetch('https://fc.yahoo.com', { 
-        redirect: 'manual',
-        headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)' }
-      });
-      const cookies = cookieRes.headers.get('set-cookie');
-      cachedCookie = cookies ? cookies.split(';').find(c => c.trim().startsWith('A3=')) || cookies.split(';')[0] : '';
+  if (!targetPath || targetPath === '/') {
+    return { statusCode: 400, body: JSON.stringify({ error: "Invalid path" }) };
+  }
 
-      // Get Crumb
-      const crumbRes = await fetch('https://query1.finance.yahoo.com/v1/test/getcrumb', {
-        headers: {
-          'Cookie': cachedCookie,
-          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)'
-        }
-      });
-      if (crumbRes.ok) {
-        cachedCrumb = await crumbRes.text();
-      }
+  const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
+  try {
+    if (!cachedCookie) {
+      const cookieRes = await fetch('https://fc.yahoo.com', { headers: { 'User-Agent': USER_AGENT } });
+      const setCookie = cookieRes.headers.get('set-cookie');
+      if (setCookie) cachedCookie = setCookie.split(';')[0];
     }
 
-    let targetUrl = '';
-    if (path.startsWith('/v8/finance/chart')) {
-      targetUrl = `https://query1.finance.yahoo.com${path}${path.includes('?') ? '&' : '?'}crumb=${cachedCrumb}`;
-    } else {
-      targetUrl = `https://query1.finance.yahoo.com${path}`;
+    if (!cachedCrumb && cachedCookie) {
+      const crumbRes = await fetch('https://query1.finance.yahoo.com/v1/test/getcrumb', {
+        headers: { 'Cookie': cachedCookie, 'User-Agent': USER_AGENT }
+      });
+      if (crumbRes.ok) cachedCrumb = await crumbRes.text();
+    }
+
+    // Construir URL final con parámetros de búsqueda si existen
+    const queryString = event.rawQuery ? `?${event.rawQuery}` : '';
+    let targetUrl = `https://${domain}${targetPath}${queryString}`;
+    
+    // Añadir crumb si es necesario
+    if (targetPath.includes('/chart/') || targetPath.includes('/quoteSummary/')) {
+      if (cachedCrumb) {
+        targetUrl += (targetUrl.includes('?') ? '&' : '?') + `crumb=${cachedCrumb}`;
+      }
     }
 
     const response = await fetch(targetUrl, {
       headers: {
         'Cookie': cachedCookie,
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)'
+        'User-Agent': USER_AGENT,
+        'Accept': '*/*',
+        'Origin': 'https://finance.yahoo.com',
+        'Referer': 'https://finance.yahoo.com/'
       }
     });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      return {
-        statusCode: response.status,
-        body: JSON.stringify({ error: "Yahoo API error", details: errorText })
-      };
-    }
 
     const data = await response.json();
 
@@ -67,15 +72,13 @@ export const handler = async (event) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
       },
       body: JSON.stringify(data)
     };
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message })
+      body: JSON.stringify({ error: error.message, path: targetPath })
     };
   }
 };
