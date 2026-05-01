@@ -1,11 +1,21 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
 let cachedCookie = '';
 let cachedCrumb = '';
 
-exports.handler = async (event, context) => {
-  const path = event.path.replace('/.netlify/functions/yahoo', '');
+export const handler = async (event) => {
+  // En Netlify, cuando usamos redirects, la ruta viene en event.path
+  // Queremos extraer todo lo que va después de /api/yahoo o /.netlify/functions/yahoo
+  let path = event.path.replace('/.netlify/functions/yahoo', '').replace('/api/yahoo', '');
   
+  // Si la ruta está vacía, no podemos hacer nada
+  if (!path || path === '/') {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "No path provided" })
+    };
+  }
+
   try {
     if (!cachedCrumb || !cachedCookie) {
       // Get Cookie
@@ -42,6 +52,14 @@ exports.handler = async (event, context) => {
       }
     });
 
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        statusCode: response.status,
+        body: JSON.stringify({ error: "Yahoo API error", details: errorText })
+      };
+    }
+
     const data = await response.json();
 
     return {
@@ -49,6 +67,8 @@ exports.handler = async (event, context) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
       },
       body: JSON.stringify(data)
     };
